@@ -8,13 +8,11 @@ export default class Page {
   components = {};
   categories = [];
 
-
   constructor() {
 
   }
 
   async render() {
-
     this.initComponents();
     const wrapper = await this.renderComponents(document.createElement('div'));
     this.element = wrapper.firstElementChild;
@@ -28,7 +26,6 @@ export default class Page {
   }
 
   showNotification = (message, type, duration = 2 * 1000) => {
-    // const {message, type} = event.detail;
     this.components.notification = new Notification(message, {type, duration});
     this.components.notification.show();
   };

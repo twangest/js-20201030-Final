@@ -280,7 +280,6 @@ export default class SortableTable {
     }
   };
 
-
   remove() {
     this.element.remove();
   }
