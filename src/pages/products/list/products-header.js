@@ -4,11 +4,14 @@ const header = [
     title: 'Фото',
     sortable: false,
     template: data => {
-      return `
+      return (data && data[0] && data[0].url)
+        ? `
           <div class="sortable-table__cell">
             <img class="sortable-table-image" alt="Image" src="${data[0].url}">
           </div>
-        `;
+        `
+        : `<div class="sortable-table__cell">
+          </div>`;
     }
   },
   {
@@ -46,10 +49,11 @@ const header = [
     sortType: 'number',
     template: data => {
       return `<div class="sortable-table__cell">
-          ${data > 0 ? 'Active' : 'Inactive'}
-        </div>`;
+        ${data > 0 ? 'Активный' : 'Неактивный'}
+      </div>`;
     }
-  },
+  }
+
 ];
 
 export default header;
