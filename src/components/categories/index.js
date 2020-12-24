@@ -69,7 +69,7 @@ export default class Categories {
     const subcategories = item.subcategories.map( value => {
       const wrapper = document.createElement('div');
       wrapper.innerHTML = `
-        <li class="categories__sortable-list-item" data-id="${value.id} data-grab-handle="">
+        <li class="categories__sortable-list-item" data-id="${value.id}" data-grab-handle="">
           <strong>${value.title}</strong>
           <span><b>${value.count}</b> products</span>
         </li>

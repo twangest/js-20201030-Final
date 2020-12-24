@@ -16,7 +16,8 @@ export default class SortableTable {
     isSortLocally: isSortLocally = false,
     start = 0,
     step = 30,
-    end = start + step
+    end = start + step,
+    requestParams={}
   } = {}) {
     this.header = header;
     this.url = new URL(url, process.env.BACKEND_URL);
@@ -25,6 +26,7 @@ export default class SortableTable {
     this.start = start;
     this.step = step;
     this.end = end;
+    this.requestParams = requestParams;
     this.render();
   }
 
@@ -36,7 +38,12 @@ export default class SortableTable {
     this.element = element;
     this.subElements = this.getSubElements(element);
 
-    const data = await this.loadData({id, order, start: this.start, end: this.end});
+    const data = await this.loadData({
+      id,
+      order,
+      start: this.start,
+      end: this.end,
+    });
 
     this.renderRows(data);
     this.initEventListeners();
@@ -67,10 +74,7 @@ export default class SortableTable {
       order = this.sorted.order,
       start = this.start,
       end = this.end,
-      title_like,
-      price_gte,
-      price_lte,
-      status
+      requestParams = this.requestParams
     }) {
     this.element.classList.add('sortable-table_loading');
     this.clearUrlParams();
@@ -79,17 +83,12 @@ export default class SortableTable {
     this.url.searchParams.set('_order', order);
     this.url.searchParams.set('_start', start);
     this.url.searchParams.set('_end', end);
-    if (typeof title_like !== 'undefined') {
-      this.url.searchParams.set('title_like', title_like);
-    }
-    if (typeof price_gte !== 'undefined') {
-      this.url.searchParams.set('price_gte', price_gte);
-    }
-    if (typeof price_lte !== 'undefined') {
-      this.url.searchParams.set('price_lte', price_lte);
-    }
-    if (typeof status !== "undefined" && status !== "" ) {
-      this.url.searchParams.set('status', parseInt(status));
+    if (Object.keys(requestParams).length) {
+      Object.entries(requestParams).forEach(([key, value]) => {
+        if (typeof value !== 'undefined') {
+          this.url.searchParams.set(key, value);
+        }
+      })
     }
     try {
       const data = await fetchJson(this.url.toString());
@@ -200,8 +199,8 @@ export default class SortableTable {
     this.subElements.body.append(...rows.childNodes);
   }
 
-  async sortOnServer(id, order, start, end) {
-    const data = await this.loadData({id, order, start, end});
+  async sortOnServer(id, order, start, end, requestParams) {
+    const data = await this.loadData({id, order, start, end, requestParams});
     this.renderRows(data);
   }
 

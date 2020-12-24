@@ -53,6 +53,10 @@
   transition: all 0.05s ease-out;
 }
 
+.category.category_open .category__body {
+  height: auto;
+}
+
 .subcategory-list {
   padding: 0 16px 24px 40px;
 }

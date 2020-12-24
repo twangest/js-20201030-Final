@@ -59,7 +59,9 @@ export default class SortableList {
   }
 
   initEventListeners() {
-    this.element.addEventListener('pointerdown', event => this.onPointerDown(event));
+    this.element.addEventListener('pointerdown', event => {
+      this.onPointerDown(event);
+    });
   }
 
   addItems() {
@@ -171,7 +173,7 @@ export default class SortableList {
     if (placeholderIndex !== this.elementInitialIndex) {
       this.element.dispatchEvent(new CustomEvent('sortable-list-reorder', {
         bubbles: true,
-        details: {
+        detail: {
           from: this.elementInitialIndex,
           to: placeholderIndex
         }
@@ -181,11 +183,11 @@ export default class SortableList {
 
   remove() {
     this.element.remove();
-    document.removeEventListener('pointermove', this.onDocumentPointerMove);
-    document.removeEventListener('pointerup', this.onDocumentPointerUp);
   }
 
   destroy() {
     this.remove();
+    document.removeEventListener('pointermove', this.onDocumentPointerMove);
+    document.removeEventListener('pointerup', this.onDocumentPointerUp);
   }
 }

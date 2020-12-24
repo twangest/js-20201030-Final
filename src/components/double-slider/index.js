@@ -137,12 +137,17 @@ export default class DoubleSlider {
 
     this.subElements.thumbLeft.style.left = left;
     this.subElements.thumbRight.style.right = right;
+
+    this.subElements.from.innerHTML = this.formatValue(this.min);
+    this.subElements.to.innerHTML = this.formatValue(this.max);
   }
+
   clearSelected() {
     this.selected.from = this.min;
     this.selected.to = this.max;
     this.update();
   }
+
   onThumbPointerDown(event) {
     const thumbElem = event.target;
 

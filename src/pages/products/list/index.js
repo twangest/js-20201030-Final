@@ -8,6 +8,8 @@ export default class Page {
   emptyPlaceholder;
   subElements = {};
   components = {};
+  status;
+  title_like;
   min = 0;
   max = 4000;
 
@@ -85,13 +87,11 @@ export default class Page {
 
   initComponents() {
     const productId = '101-planset-lenovo-yt3-x90l-64-gb-3g-lte-cernyj';
-
+    const {status, title_like, min:price_gte, max:price_lte} = this;
     this.components.productList = new SortableTable(productHeader, {
       url: '/api/rest/products',
     });
-    // this.components.productFrom = new ProductForm(productId);
     this.components.doubleSlider = new DoubleSlider({min: this.min, max: this.max});
-
   }
 
   renderComponents() {
@@ -109,13 +109,13 @@ export default class Page {
   }
 
   onFilterName = async (event) => {
-    const title_like = event.target.value;
-    await this.filterProductList({title_like});
+    this.title_like = event.target.value;
+    await this.filterProductList();
   };
 
   onFilterStatus = async (event) => {
-    const status = event.target.value;
-    await this.filterProductList({status});
+    this.status = event.target.value;
+    await this.filterProductList();
   };
 
   onRangeSelect = async (event) => {
@@ -135,13 +135,14 @@ export default class Page {
   };
 
   filterProductList = async (params) => {
-    //Fixme: Правильно выставить параметры price_gte и price_lte
-    // слетают при сортировке цены
-    const data = await this.components.productList.loadData({
-      ...params,
-      price_gte: this.min,
-      price_lte: this.max,
-    });
+    const {min: price_gte, max: price_lte, status, title_like} = this;
+    const requestParams = {
+      status,
+      title_like,
+      price_gte,
+      price_lte,
+    }
+    const data = await this.components.productList.loadData({requestParams});
     await this.components.productList.renderRows(data);
   };
 
